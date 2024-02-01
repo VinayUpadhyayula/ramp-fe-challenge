@@ -10,12 +10,12 @@ import { Employee } from "./utils/types"
 import { useCustomFetch } from "./hooks/useCustomFetch"
 
 export function App() {
-  const [changed, setIsChanged] = useState(false);
+  //const [changed, setIsChanged] = useState(false);
   const { data: employees, ...employeeUtils } = useEmployees()
   const { data: paginatedTransactions, ...paginatedTransactionsUtils } = usePaginatedTransactions()
   const { data: transactionsByEmployee, ...transactionsByEmployeeUtils } = useTransactionsByEmployee()
   const [isLoading, setIsLoading] = useState(false)
-  const { fetchWithoutCache, loading } = useCustomFetch()
+  //const { fetchWithoutCache, loading } = useCustomFetch()
 
   // const setChangedData = useCallback<setChangedDataFunction>(
   //   async ({ transactionId, newValue }) => {
