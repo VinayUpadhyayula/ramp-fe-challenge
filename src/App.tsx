@@ -7,12 +7,25 @@ import { usePaginatedTransactions } from "./hooks/usePaginatedTransactions"
 import { useTransactionsByEmployee } from "./hooks/useTransactionsByEmployee"
 import { EMPTY_EMPLOYEE } from "./utils/constants"
 import { Employee } from "./utils/types"
+import { useCustomFetch } from "./hooks/useCustomFetch"
 
 export function App() {
+  const [changed, setIsChanged] = useState(false);
   const { data: employees, ...employeeUtils } = useEmployees()
   const { data: paginatedTransactions, ...paginatedTransactionsUtils } = usePaginatedTransactions()
   const { data: transactionsByEmployee, ...transactionsByEmployeeUtils } = useTransactionsByEmployee()
   const [isLoading, setIsLoading] = useState(false)
+  const { fetchWithoutCache, loading } = useCustomFetch()
+
+  // const setChangedData = useCallback<setChangedDataFunction>(
+  //   async ({ transactionId, newValue }) => {
+  //     await fetchWithoutCache<void, setChangedDataParams>("setChangedData", {
+  //       transactionId,
+  //       value: newValue,
+  //     })
+  //   },
+  //   [fetchWithoutCache]
+  // )
 
   const transactions = useMemo(
     () => paginatedTransactions?.data ?? transactionsByEmployee ?? null,
@@ -20,6 +33,7 @@ export function App() {
   )
 
   const loadAllTransactions = useCallback(async () => {
+    console.log('entered load')
     setIsLoading(true)
     transactionsByEmployeeUtils.invalidateData()
 
@@ -32,7 +46,6 @@ export function App() {
   const loadTransactionsByEmployee = useCallback(
     async (employeeId: string) => {
       paginatedTransactionsUtils.invalidateData()
-      console.log(employeeId)
       await transactionsByEmployeeUtils.fetchById(employeeId)
     },
     [paginatedTransactionsUtils, transactionsByEmployeeUtils]
@@ -65,11 +78,17 @@ export function App() {
             if (newValue === null) {
               return
             }
-            else if(newValue.id ==='')
+            // if (changed) {
+            //   // TODO
+            //   paginatedTransactions.data = fetchWithoutCache.
+            // }
+            else {
+            if(newValue.id ==='')
               await loadAllTransactions()
             else
               await loadTransactionsByEmployee(newValue.id)
-          }}
+            }
+            }}
         />
 
         <div className="RampBreak--l" />
